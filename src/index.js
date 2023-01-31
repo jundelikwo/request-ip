@@ -55,6 +55,12 @@ function getClientIpFromXForwardedFor(value) {
 function getClientIp(req) {
     // Server is probably behind a proxy.
     if (req.headers) {
+        // DigitalOcean.
+        // DO-Connecting-IP - applied to app platform servers behind a proxy.
+        if (is.ip(req.headers['do-connecting-ip'])) {
+            return req.headers['do-connecting-ip'];
+        }
+
         // Standard headers used by Amazon EC2, Heroku, and others.
         if (is.ip(req.headers['x-client-ip'])) {
             return req.headers['x-client-ip'];
